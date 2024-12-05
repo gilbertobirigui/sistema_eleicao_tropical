@@ -10,6 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+import sys
+
+from pathlib import Path
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,11 +22,26 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
 STATIC_DIR=os.path.join(BASE_DIR,'static') 
 
+
+# Adicionar essa tag para que nosso projeto encontre o .env
+load_dotenv(os.path.join(BASE_DIR, ".env")) 
+
+# Diz para Projeto Django aonde estão nossos aplicativos
+APPS_DIR = str(os.path.join(BASE_DIR,'apps')) # Dentro da pasta apps na raiz do projeto
+sys.path.insert(0, APPS_DIR)
+
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#02za43)qv-8xdksi8j7l^=s-b#%kklk*^=tmcz!b#(=#p5oey'
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv('DEBUG')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,6 +59,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+THIRD_APPS = [ # são as Lib/app que instalamos no projeto
+    #... # update 11/03/2024 - removido esses ...
+]
+
+PROJECT_APPS = [ # são os apps que criamos no projeto 
+        # 'apps.base',		# update 11/03/2024
+        # 'apps.myapp',   # Removido esses apps que nao criamos ainda.
+]
+
+# INSTALLED_APPS é a variavel que django entende para fazer a leitura \
+# dos aplicativos então verifica a nomencratura.
+INSTALLED_APPS = DJANGO_APPS + THIRD_APPS + PROJECT_APPS
+
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,10 +110,15 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# Banco de Dados.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), 
+        'NAME': os.path.join(BASE_DIR, os.getenv('NAME_DB')),
+            #'USER':os.getenv('USER_DB')
+            #'PASSWORD': os.getenv('PASSWORD_DB')
+            #'HOST':os.getenv('HOST_DB')
+            #'PORT':os.getenv('PORT_DB') 
     }
 }
 
@@ -119,7 +160,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/ 
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
-STATIC_URL = '/static/' 
+STATIC_URL = '/static/'
 
 # STATICFILES_DIRS = [ # talvez em Produção podesse usar assim.
 #     BASE_DIR / 'static',
@@ -135,3 +176,14 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# Configuração de E-mail
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') 
+EMAIL_PORT = os.getenv('EMAIL_PORT') 
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') 
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
