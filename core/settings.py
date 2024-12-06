@@ -14,6 +14,7 @@ import sys
 
 from pathlib import Path
 from dotenv import load_dotenv
+from corsheaders.defaults import default_headers
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -46,12 +47,79 @@ DEBUG = os.getenv('DEBUG')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+# QUANDO VC VER ASSIM ['*']  VOCE ESTA PERMITINDO TODOS E NAO É LEGAL
+ALLOWED_HOSTS = [
+        'localhost', 
+	    '127.0.0.1',
+]
+
+
+# CORS Config  indica que a configuração a seguir está relacionada ao CORS (Cross-Origin Resource Sharing).
+#CORS_ALLOW_HEADERS:
+# Esta é uma configuração usada para especificar quais cabeçalhos 
+# HTTP são permitidos em solicitações CORS. CORS é uma política de 
+# segurança que permite que recursos de um domínio sejam acessados por outro domínio.
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    # ['X-Register']:
+    # Esta parte adiciona o cabeçalho personalizado 'X-Register' à lista de cabeçalhos permitidos. 
+    # O operador + concatena a lista default_headers com a lista ['X-Register'].
+ 	'X-Register',
+] 
+
+# list(default_headers):
+# default_headers é uma lista padrão de cabeçalhos permitidos. A função list() 
+# é usada para garantir que default_headers seja uma lista, caso não seja.
+
+# Resumo A linha de código está configurando a lista de cabeçalhos permitidos 
+# para solicitações CORS, incluindo todos os cabeçalhos padrão e adicionando um 
+# cabeçalho personalizado chamado 'X-Register'. Isso é útil quando você precisa 
+# permitir cabeçalhos específicos que não estão incluídos na lista padrão
+
+
+
+
+
+CORS_ORIGIN_ALLOW_ALL = True  
+# CORS_ORIGIN_ALLOW_ALL como True, o que permite que qualquer site acesse seus recursos.
+# Defina como False e adicione o site no CORS_ORIGIN_WHITELIST onde somente o site da lista acesse os seus recursos.
+
+CORS_ALLOW_CREDENTIALS = False 
+CORS_ORIGIN_WHITELIST = ['http://meusite.com',] # Lista. 
+
+
+if not DEBUG:
+	SECURE_SSL_REDIRECT = True
+	ADMINS = [(os.getenv('SUPER_USER'), os.getenv('EMAIL'))]
+	SESSION_COOKIE_SECURE = True
+	CSRF_COOKIE_SECURE = True 
+
+# explicacao abaixar do codigo if not DEBUG:
+# if not DEBUG: verifica se a aplicação está sendo executada em modo de depuração (DEBUG=True).
+# Se DEBUG for False, isso significa que a aplicação está sendo executada em um ambiente de 
+# produção, portanto, as configurações de segurança devem ser aplicadas.
+
+# SECURE_SSL_REDIRECT direciona todas as solicitações HTTP para HTTPS.
+
+# ADMINS é uma lista de tuplas que contêm informações sobre os administradores do site. 
+# Se ocorrer um erro no site, um email será enviado para os endereços listados em ADMINS.
+
+# SESSION_COOKIE_SECURE garante que os cookies de sessão sejam definidos apenas em conexões HTTPS.
+
+# CSRF_COOKIE_SECURE garante que os cookies CSRF sejam definidos apenas em conexões HTTPS.
+
+# Essas configurações ajudam a proteger a aplicação contra ataques de interceptação e garantem
+# que as informações confidenciais do usuário sejam mantidas seguras.
+
+# Com essas configurações, você permitirá que o site "http://meusite.com" acesse seus recursos. 
+# É importante lembrar que, para que isso funcione, o site que está acessando seus recursos 
+# também deve ter a configuração CORS correta.
+
 
 
 # Application definition
-
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,8 +128,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+
 THIRD_APPS = [ # são as Lib/app que instalamos no projeto
     #... # update 11/03/2024 - removido esses ...
+    "corsheaders",
 ]
 
 PROJECT_APPS = [ # são os apps que criamos no projeto 
@@ -79,6 +149,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_APPS + PROJECT_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # CORS
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
