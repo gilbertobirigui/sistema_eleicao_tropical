@@ -155,6 +155,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'requestlogs.middleware.RequestLogsMiddleware',  # LOGS
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -213,6 +214,46 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+
+REST_FRAMEWORK={ 
+    'EXCEPTION_HANDLER': 'requestlogs.views.exception_handler',
+}
+
+
+# Configuração padrão de Logs 
+LOGGING = { # update 03/11/2024 
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'requestlogs_to_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'info.log',
+            'when': 'midnight',  # Rotaciona a cada meia-noite
+            'backupCount': 7,  # Mantém logs dos últimos 7 dias
+            'formatter': 'verbose',  # Configuração de formatação
+        },
+    },
+    'loggers': {
+        'requestlogs': {
+            'handlers': ['requestlogs_to_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} {message}',
+            'style': '{',
+        },
+    },
+}
+
+REQUESTLOGS = {
+    'SECRETS': ['password', 'token'],
+    'METHODS': ('PUT', 'PATCH', 'POST', 'DELETE'),
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/ 
