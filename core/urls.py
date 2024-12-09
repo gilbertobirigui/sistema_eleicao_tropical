@@ -19,28 +19,20 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from django.http import JsonResponse
+
+
 import logging
-
-
-urlpatterns = [
-     path('test-logging/', test_logging_view, name='test_logging'),
-    path('admin/', admin.site.urls),
-   ]
-
-
-if settings.DEBUG: # update 03/11/2024: (em homologa com debug true adiciona rota static)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
+from django.http import JsonResponse
 
 
 # Obtenha o logger configurado
 logger = logging.getLogger('requestlogs')
 
+
+
 def test_logging_view(request):
     try:
-        data = {'user': 'leticia', 'email': 'leticia@contato.com'}
+        data = {'user': 'gilberto', 'email': 'gilberto@contato.com'}
         # Força um erro proposital para testar o log
         raise ValueError("Erro simulado no envio de email")
     except Exception as e:
@@ -48,3 +40,14 @@ def test_logging_view(request):
         logger.error(f"{str(e)} | {str(data)}")
         return JsonResponse({"status": "error", "message": "Ocorreu um erro."})
 
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('test-logging/', test_logging_view, name='test_logging'),
+    
+   ]
+
+
+if settings.DEBUG: # em homologa com debug true adiciona rota static)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

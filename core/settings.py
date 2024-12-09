@@ -12,16 +12,19 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 import sys
 
-from pathlib import Path
 from dotenv import load_dotenv
+from pathlib import Path
 from corsheaders.defaults import default_headers
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
-STATIC_DIR=os.path.join(BASE_DIR,'static') 
+STATIC_DIR=os.path.join(BASE_DIR,'static')
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+ 
 
 
 # Adicionar essa tag para que nosso projeto encontre o .env
@@ -45,7 +48,7 @@ DEBUG = os.getenv('DEBUG')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 
 # QUANDO VC VER ASSIM ['*']  VOCE ESTA PERMITINDO TODOS E NAO É LEGAL
@@ -85,8 +88,13 @@ CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ORIGIN_ALLOW_ALL como True, o que permite que qualquer site acesse seus recursos.
 # Defina como False e adicione o site no CORS_ORIGIN_WHITELIST onde somente o site da lista acesse os seus recursos.
 
+
+
 CORS_ALLOW_CREDENTIALS = False 
+
+
 CORS_ORIGIN_WHITELIST = ['http://meusite.com',] # Lista. 
+
 
 
 if not DEBUG:
@@ -249,6 +257,26 @@ LOGGING = { # update 03/11/2024
         },
     },
 }
+"""
+ # Configuração padrão de Logs 
+LOGGING =               
+No Django (e no Python em geral), os níveis de log disponíveis são:
+
+    DEBUG: Para informações detalhadas, geralmente usadas para depuração. Esse nível inclui praticamente tudo.
+    INFO: Para informações gerais sobre o funcionamento normal do sistema. Esse nível é bom para acompanhar operações comuns, sem muitos detalhes.
+    WARNING: Para situações incomuns que não são erros, mas podem exigir atenção.
+    ERROR: Para erros que impedem uma operação específica, mas não interrompem o sistema como um todo.
+    CRITICAL: Para erros graves que podem exigir intervenção imediata.
+
+No seu caso, com level: 'INFO', o sistema registrará mensagens de INFO, WARNING, ERROR e CRITICAL.
+
+Se você quer menos logs, use WARNING ou superior; se quer mais detalhes, use DEBUG.             
+                
+"""
+
+
+
+
 
 REQUESTLOGS = {
     'SECRETS': ['password', 'token'],
