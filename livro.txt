@@ -1,0 +1,56 @@
+
+
+
+acessar django
+
+
+documentacao link
+https://docs.djangoproject.com/pt-br/5.1/ref/templates/language/
+
+Herança de modelo -> ela vai permitir que a gente crie modelo basico html
+
+
+
+
+
+Explicação
+{% load static %}:
+
+Esta linha carrega a tag static do Django, que é usada para referenciar arquivos estáticos no 
+seu projeto.
+
+Cabeçalho HTML (<head>):
+
+Contém metadados do documento, como charset, viewport, descrição, palavras-chave e autor.
+
+O título da página é definido dentro do bloco {% block title %}{% endblock %}, permitindo que 
+cada template filho substitua o título.
+
+CSS:
+
+Inclui o CSS do Bootstrap a partir de um CDN.
+
+Inclui um arquivo CSS personalizado (style.css) usando a tag static do Django para gerar o 
+caminho correto.
+
+Corpo HTML (<body>):
+
+Contém o bloco {% block content %}{% endblock %}, que será substituído pelo conteúdo específico 
+de cada template filho.
+
+JavaScript:
+
+Inclui o JavaScript do Bootstrap e jQuery a partir de CDNs.
+
+Inclui um arquivo JavaScript personalizado (script.js) usando a tag static do Django para 
+gerar o caminho correto.
+
+Contém o bloco {% block scripts %}{% endblock scripts %}, permitindo que cada template filho 
+adicione scripts adicionais.
+
+Resumo
+Este código configura um template base para um projeto Django, carregando arquivos estáticos
+ (CSS e JavaScript) e definindo blocos ({% block %}) que podem ser substituídos por templates
+ filhos. Isso facilita a reutilização e a organização do código.
+
+
