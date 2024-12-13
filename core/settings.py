@@ -17,9 +17,7 @@ from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
-
 STATIC_DIR=os.path.join(BASE_DIR,'static') 
 
 # Adicionar essa tag para que nosso projeto encontre o .env
@@ -78,7 +76,8 @@ THIRD_APPS = [ # são as Lib/app que instalamos no projeto
 
 PROJECT_APPS = [ # são os apps que criamos no projeto 
     'apps.base', 
-    'apps.pages', 
+    'apps.pages',
+    'apps.contas' 
 ]
 
 # INSTALLED_APPS é a variavel que django entende para fazer a leitura dos aplicativos então verifica a nomencratura.
@@ -117,6 +116,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
+
+AUTH_USER_MODEL = "contas.MyUser" 
+
 
 
 # Database
