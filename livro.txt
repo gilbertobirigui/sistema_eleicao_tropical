@@ -54,3 +54,8 @@ Este código configura um template base para um projeto Django, carregando arqui
  filhos. Isso facilita a reutilização e a organização do código.
 
 
+
+
+DOCUMENTAO DO Django
+
+https://pypi.org/project/django-session-timeout/
