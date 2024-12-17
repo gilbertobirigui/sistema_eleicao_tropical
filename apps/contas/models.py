@@ -15,7 +15,7 @@ class MyUserManager(BaseUserManager):
         kwargs.setdefault('is_superuser', True)
         return self.create_user(email, password, **kwargs)
 
-class MyUser(AbstractBaseUser, PermissionsMixin):   # esta herdando abstractBaseUser
+class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, max_length=255)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
